@@ -4,18 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.eliasnogueira</groupId>
+    <groupId>com.larry</groupId>
     <artifactId>selenium-java-lean-test-architecture</artifactId>
     <version>3.9.0</version>
 
     <scm>
-        <connection>scm:git@github.com:eliasnogueira/selenium-java-lean-test-architecture.git</connection>
-        <developerConnection>scm:git@github.com:eliasnogueira/selenium-java-lean-test-architecture.git
+        <connection>scm:git@github.com:larry/selenium-java-lean-test-architecture.git</connection>
+        <developerConnection>scm:git@github.com:larry/selenium-java-lean-test-architecture.git
         </developerConnection>
     </scm>
 
     <properties>
-        <java-compiler.version>25</java-compiler.version>
+        <java-compiler.version>21</java-compiler.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven-surefire-plugin.version>3.5.5</maven-surefire-plugin.version>

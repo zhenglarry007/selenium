@@ -4,7 +4,7 @@
     <test name="Test">
         <parameter name="browser" value="chrome"/>
         <classes>
-            <class name="com.eliasnogueira.test.BookRoomWebTest"/>
+            <class name="com.larry.test.BookRoomWebTest"/>
         </classes>
     </test>
 
