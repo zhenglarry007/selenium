@@ -1,0 +1,29 @@
+[
+  {
+    "testCaseName": "TC01 - 正确的用户名和密码",
+    "username": "mngr659009",
+    "password": "UdEquve",
+    "expectedResult": "登录成功",
+    "expectedAlertText": null,
+    "expectedPageTitle": "Guru99 Bank Manager HomePage",
+    "shouldLoginSuccess": true
+  },
+  {
+    "testCaseName": "TC02 - 错误的用户名和正确的密码",
+    "username": "invalidUser",
+    "password": "UdEquve",
+    "expectedResult": "登录失败",
+    "expectedAlertText": "User or Password is not valid",
+    "expectedPageTitle": "Guru99 Bank Home Page",
+    "shouldLoginSuccess": false
+  },
+  {
+    "testCaseName": "TC03 - 正确的用户名和错误的密码",
+    "username": "mngr659009",
+    "password": "invalidPass",
+    "expectedResult": "登录失败",
+    "expectedAlertText": "User or Password is not valid",
+    "expectedPageTitle": "Guru99 Bank Home Page",
+    "shouldLoginSuccess": false
+  }
+]

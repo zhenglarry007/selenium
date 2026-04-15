@@ -7,6 +7,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.larry.model.Booking;
+import com.larry.model.LoginTestData;
 import org.testng.annotations.DataProvider;
 
 import java.io.IOException;
@@ -21,6 +22,11 @@ public class TestDataProvider {
     private static final CsvMapper csvMapper = new CsvMapper();
 
     private TestDataProvider() {
+    }
+
+    @DataProvider(name = "loginTestData")
+    public static Object[][] loginTestData() {
+        return loadJsonData("/testdata/login_test_data.json", new TypeReference<List<LoginTestData>>() {});
     }
 
     @DataProvider(name = "bookingDataJson")
