@@ -1,0 +1,29 @@
+[
+  {
+    "email": "test1@example.com",
+    "country": "Beijing",
+    "password": "Pass123!",
+    "dailyBudget": "Under ￥100",
+    "newsletter": true,
+    "roomType": "SINGLE",
+    "roomDescription": "Test booking for single room"
+  },
+  {
+    "email": "test2@example.com",
+    "country": "Shanghai",
+    "password": "Pass456!",
+    "dailyBudget": "￥100 - ￥200",
+    "newsletter": false,
+    "roomType": "FAMILY",
+    "roomDescription": "Test booking for family room"
+  },
+  {
+    "email": "test3@example.com",
+    "country": "Guangzhou",
+    "password": "Pass789!",
+    "dailyBudget": "￥200 - ￥400",
+    "newsletter": true,
+    "roomType": "BUSINESS",
+    "roomDescription": "Test booking for business room"
+  }
+]

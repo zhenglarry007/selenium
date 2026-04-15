@@ -34,4 +34,13 @@ public interface Configuration extends Config {
 
     @Key("faker.locale")
     String faker();
+
+    @Key("retry.local")
+    int retryLocal();
+
+    @Key("retry.ci")
+    int retryCi();
+
+    @Key("environment")
+    String environment();
 }

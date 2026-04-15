@@ -2,14 +2,11 @@ package com.larry.page.booking;
 
 import com.larry.driver.DriverManager;
 import com.larry.page.booking.common.NavigationPage;
+import com.larry.wait.Waits;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import static com.larry.config.ConfigurationManager.configuration;
 
 public class AccountPage extends NavigationPage {
 
@@ -21,12 +18,12 @@ public class AccountPage extends NavigationPage {
 
     @Step
     public void fillEmail(String email) {
-        this.email.sendKeys(email);
+        Waits.waitForVisibility(this.email).sendKeys(email);
     }
 
     @Step
     public void fillPassword(String password) {
-        this.password.sendKeys(password);
+        Waits.waitForVisibility(this.password).sendKeys(password);
     }
 
     @Step
@@ -41,25 +38,17 @@ public class AccountPage extends NavigationPage {
 
     @Step
     public void clickNewsletter() {
-        // The new page does not have the newsletter checkbox anymore.
-        // Keep this method for backward compatibility with test flow.
     }
 
     private void selectElementPlusOption(int dropdownIndex, String optionText) {
-        var driver = DriverManager.getDriver();
-        var wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(configuration().timeout()));
-
-        var dropdowns = wait.until(d -> {
-            var items = d.findElements(By.cssSelector(".el-select"));
-            return items.size() > dropdownIndex ? items : null;
-        });
+        var dropdowns = Waits.waitForListToLoad(By.cssSelector(".el-select"), dropdownIndex + 1);
         var dropdown = dropdowns.get(dropdownIndex);
-        dropdown.click();
+        Waits.waitForClickability(dropdown).click();
 
-        var option = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+        var option = Waits.waitForClickability(By.xpath(
                 "//div[contains(@class,'el-select-dropdown') and not(contains(@style,'display: none'))]" +
                         "//li[contains(@class,'el-select-dropdown__item') and not(contains(@class,'is-disabled'))]" +
-                        "[.//*[normalize-space()='" + optionText + "']]")));
+                        "[.//*[normalize-space()='" + optionText + "']]"));
         option.click();
     }
 }

@@ -1,0 +1,4 @@
+email,country,password,dailyBudget,newsletter,roomType,roomDescription
+test1@example.com,Beijing,Pass123!,Under ￥100,true,SINGLE,Test booking for single room
+test2@example.com,Shanghai,Pass456!,￥100 - ￥200,false,FAMILY,Test booking for family room
+test3@example.com,Guangzhou,Pass789!,￥200 - ￥400,true,BUSINESS,Test booking for business room
