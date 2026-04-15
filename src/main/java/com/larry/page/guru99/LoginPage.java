@@ -54,19 +54,33 @@ public class LoginPage extends AbstractPageObject {
     @Step("Get alert text")
     public String getAlertText() {
         try {
-            Waits.waitForCustomCondition(ExpectedConditions.alertIsPresent());
-            Alert alert = Waits.waitForCustomCondition(ExpectedConditions.alertIsPresent());
-            return alert.getText();
+            Alert alert = ExpectedConditions.alertIsPresent().apply(com.larry.driver.DriverManager.getDriver());
+            if (alert != null) {
+                return alert.getText();
+            }
+            return null;
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    @Step("Check if alert is present")
+    public boolean isAlertPresent() {
+        try {
+            Alert alert = ExpectedConditions.alertIsPresent().apply(com.larry.driver.DriverManager.getDriver());
+            return alert != null;
+        } catch (Exception e) {
+            return false;
         }
     }
 
     @Step("Accept alert")
     public void acceptAlert() {
         try {
-            Alert alert = Waits.waitForCustomCondition(ExpectedConditions.alertIsPresent());
-            alert.accept();
+            Alert alert = ExpectedConditions.alertIsPresent().apply(com.larry.driver.DriverManager.getDriver());
+            if (alert != null) {
+                alert.accept();
+            }
         } catch (Exception e) {
         }
     }

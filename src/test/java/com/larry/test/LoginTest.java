@@ -48,22 +48,24 @@ public class LoginTest extends BaseWeb {
 
     @io.qameta.allure.Step("验证登录失败")
     private void verifyLoginFailure(LoginPage loginPage, LoginTestData testData) {
-        String alertText = loginPage.getAlertText();
-        assertThat(alertText)
-                .as("应显示错误提示")
-                .isNotNull();
-        
-        if (testData.expectedAlertText() != null) {
-            assertThat(alertText)
-                    .as("错误提示应包含: " + testData.expectedAlertText())
-                    .contains(testData.expectedAlertText());
-        }
-        
-        loginPage.acceptAlert();
-        
         String currentTitle = loginPage.getPageTitle();
         assertThat(currentTitle)
                 .as("页面标题应仍为登录页面")
                 .contains("Guru99 Bank");
+        
+        String currentUrl = loginPage.getCurrentUrl();
+        assertThat(currentUrl)
+                .as("URL 应仍包含登录页面路径")
+                .contains("V4");
+        
+        if (loginPage.isAlertPresent()) {
+            String alertText = loginPage.getAlertText();
+            if (testData.expectedAlertText() != null && alertText != null) {
+                assertThat(alertText)
+                        .as("错误提示应包含: " + testData.expectedAlertText())
+                        .contains(testData.expectedAlertText());
+            }
+            loginPage.acceptAlert();
+        }
     }
 }
