@@ -14,20 +14,89 @@
 
 ```text
 .
-├── assets/project-execution-screenshots/     # README 执行截图
-├── grid/                                 # Selenium Grid 相关配置
-├── src/main/java/com/larry
-│   ├── config/                           # 配置读取（Owner）
-│   ├── driver/                           # Driver 工厂与管理
-│   ├── page/                             # Page Object
-│   └── report/                           # Allure 相关能力
-├── src/test/java/com/larry
-│   ├── BaseWeb.java                      # 测试基类（启动/销毁驱动）
-│   └── test/BookRoomWebTest.java         # 示例测试
-├── src/test/resources
-│   ├── suites/                           # TestNG suite 文件
-│   ├── general.properties                # 通用配置
-│   └── selenium-grid.properties          # Grid 配置
+├── assets/
+│   └── project-execution-screenshots/           # README 执行截图
+│       ├── allure_report.gif
+│       ├── step-01.png
+│       ├── step-02.png
+│       └── step-03.png
+├── grid/                                         # Selenium Grid 相关配置
+│   ├── config.toml
+│   └── docker-compose.yml
+├── src/
+│   ├── main/
+│   │   ├── java/com/larry/
+│   │   │   ├── assertion/                        # UI 断言工具类
+│   │   │   │   └── UiAssertions.java
+│   │   │   ├── config/                           # 配置读取（Owner）
+│   │   │   │   ├── Configuration.java
+│   │   │   │   └── ConfigurationManager.java
+│   │   │   ├── data/                             # 测试数据
+│   │   │   │   ├── changeless/                  # 静态数据
+│   │   │   │   │   └── BrowserData.java
+│   │   │   │   ├── dynamic/                     # 动态数据工厂
+│   │   │   │   │   └── BookingDataFactory.java
+│   │   │   │   └── provider/                    # 数据提供者（JSON/CSV/YAML）
+│   │   │   │       └── TestDataProvider.java
+│   │   │   ├── driver/                           # Driver 工厂与管理
+│   │   │   │   ├── BrowserFactory.java
+│   │   │   │   ├── DriverManager.java
+│   │   │   │   └── TargetFactory.java
+│   │   │   ├── enums/                            # 枚举类型
+│   │   │   │   ├── RoomType.java
+│   │   │   │   └── Target.java
+│   │   │   ├── exceptions/                       # 自定义异常
+│   │   │   │   └── HeadlessNotSupportedException.java
+│   │   │   ├── model/                            # 数据模型
+│   │   │   │   ├── Booking.java
+│   │   │   │   ├── DashboardConfig.java
+│   │   │   │   ├── DashboardTestData.java
+│   │   │   │   └── LoginTestData.java
+│   │   │   ├── page/                             # Page Object
+│   │   │   │   ├── booking/                     # 预订流程页面
+│   │   │   │   │   ├── common/                  # 公共组件
+│   │   │   │   │   │   └── NavigationPage.java
+│   │   │   │   │   ├── AccountPage.java
+│   │   │   │   │   ├── DashboardPage.java
+│   │   │   │   │   ├── DetailPage.java
+│   │   │   │   │   └── RoomPage.java
+│   │   │   │   ├── guru99/                      # Guru99 银行页面
+│   │   │   │   │   └── LoginPage.java
+│   │   │   │   └── AbstractPageObject.java      # Page Object 基类
+│   │   │   ├── report/                           # Allure 报告相关
+│   │   │   │   ├── AllureFailureAttachment.java # 失败时附加信息（源码/日志/网络错误）
+│   │   │   │   ├── AllureManager.java
+│   │   │   │   ├── AllureTestLifecycleListener.java
+│   │   │   │   └── SeleniumActionListener.java  # Selenium 动作监听器
+│   │   │   ├── retry/                            # 测试重试机制
+│   │   │   │   ├── RetryAnalyzer.java
+│   │   │   │   └── RetryContext.java
+│   │   │   └── wait/                             # 等待工具类
+│   │   │       └── Waits.java
+│   │   └── resources/
+│   │       └── log4j2.properties
+│   └── test/
+│       ├── java/com/larry/
+│       │   ├── test/                             # 测试类
+│       │   │   ├── BookRoomWebTest.java          # 预订房间测试
+│       │   │   ├── DashboardTest.java            # 数据仪表盘测试
+│       │   │   └── LoginTest.java                # 登录测试
+│       │   └── BaseWeb.java                      # 测试基类（启动/销毁驱动）
+│       └── resources/
+│           ├── META-INF/services/
+│           │   └── io.qameta.allure.listener.TestLifecycleListener
+│           ├── suites/                           # TestNG Suite 文件
+│           │   ├── local.xml
+│           │   └── selenium-grid.xml
+│           ├── testdata/                         # 测试数据文件
+│           │   ├── booking.json                  # 预订测试数据（JSON）
+│           │   ├── dashboard_test_data.json      # 仪表盘测试数据
+│           │   └── login_test_data.json          # 登录测试数据
+│           ├── allure.properties
+│           ├── general.properties                # 通用配置
+│           └── selenium-grid.properties          # Grid 配置
+├── .gitignore
+├── pom.xml
 └── README.MD
 ```
 
