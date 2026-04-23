@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.larry.data.dynamic.BookingDataFactory;
 import com.larry.model.Booking;
 import com.larry.model.DashboardConfig;
 import com.larry.model.DashboardTestData;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestDataProvider {
+    
+    private static final int DYNAMIC_DATA_COUNT = 5;
 
     private static final ObjectMapper jsonMapper = new ObjectMapper();
     private static final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
@@ -36,6 +39,16 @@ public class TestDataProvider {
     @DataProvider(name = "bookingDataJson")
     public static Object[][] bookingDataJson() {
         return loadJsonData("/testdata/booking.json", new TypeReference<List<Booking>>() {});
+    }
+
+    @DataProvider(name = "bookingDataDynamic")
+    public static Object[][] bookingDataDynamic() {
+        List<Booking> bookingList = new ArrayList<>();
+        for (int i = 0; i < DYNAMIC_DATA_COUNT; i++) {
+            Booking booking = BookingDataFactory.createBookingData();
+            bookingList.add(booking);
+        }
+        return toObjectArray(bookingList);
     }
 
     @DataProvider(name = "dashboardTestData")
