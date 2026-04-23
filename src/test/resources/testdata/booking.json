@@ -1,29 +1,92 @@
 [
   {
-    "email": "test1@example.com",
+    "email": "user001@example.com",
     "country": "Beijing",
-    "password": "Pass123!",
+    "password": "P@ssw0rd_01",
     "dailyBudget": "Under ￥100",
     "newsletter": true,
     "roomType": "SINGLE",
-    "roomDescription": "Test booking for single room"
+    "roomDescription": "Business trip for single occupancy, need quiet room with good internet."
   },
   {
-    "email": "test2@example.com",
+    "email": "user002@example.com",
     "country": "Shanghai",
-    "password": "Pass456!",
+    "password": "P@ssw0rd_02",
     "dailyBudget": "￥100 - ￥200",
     "newsletter": false,
     "roomType": "FAMILY",
-    "roomDescription": "Test booking for family room"
+    "roomDescription": "Family vacation with two kids, need connecting rooms if possible."
   },
   {
-    "email": "test3@example.com",
+    "email": "user003@example.com",
     "country": "Guangzhou",
-    "password": "Pass789!",
+    "password": "P@ssw0rd_03",
     "dailyBudget": "￥200 - ￥400",
     "newsletter": true,
     "roomType": "BUSINESS",
-    "roomDescription": "Test booking for business room"
+    "roomDescription": "Executive meeting, need conference facilities and business center access."
+  },
+  {
+    "email": "user004@example.com",
+    "country": "Shenzhen",
+    "password": "P@ssw0rd_04",
+    "dailyBudget": "Over ￥400",
+    "newsletter": false,
+    "roomType": "SINGLE",
+    "roomDescription": "Luxury suite for VIP guest, require airport pickup service."
+  },
+  {
+    "email": "user005@example.com",
+    "country": "Beijing",
+    "password": "P@ssw0rd_05",
+    "dailyBudget": "￥100 - ￥200",
+    "newsletter": true,
+    "roomType": "FAMILY",
+    "roomDescription": "Extended stay for one month, need kitchen and laundry facilities."
+  },
+  {
+    "email": "user006@example.com",
+    "country": "Shanghai",
+    "password": "P@ssw0rd_06",
+    "dailyBudget": "Under ￥100",
+    "newsletter": false,
+    "roomType": "SINGLE",
+    "roomDescription": "Budget backpacker, just need a clean bed and shared bathroom is fine."
+  },
+  {
+    "email": "user007@example.com",
+    "country": "Guangzhou",
+    "password": "P@ssw0rd_07",
+    "dailyBudget": "￥200 - ￥400",
+    "newsletter": true,
+    "roomType": "BUSINESS",
+    "roomDescription": "Training seminar for 15 people, need breakout rooms and AV equipment."
+  },
+  {
+    "email": "user008@example.com",
+    "country": "Shenzhen",
+    "password": "P@ssw0rd_08",
+    "dailyBudget": "Over ￥400",
+    "newsletter": false,
+    "roomType": "FAMILY",
+    "roomDescription": "Wedding anniversary celebration, need romantic decoration and champagne service."
+  },
+  {
+    "email": "user009@example.com",
+    "country": "Beijing",
+    "password": "P@ssw0rd_09",
+    "dailyBudget": "Under ￥100",
+    "newsletter": true,
+    "roomType": "SINGLE",
+    "roomDescription": "Last minute booking due to flight cancellation, early check-in needed."
+  },
+  {
+    "email": "user010@example.com",
+    "country": "Shanghai",
+    "password": "P@ssw0rd_10",
+    "dailyBudget": "￥100 - ￥200",
+    "newsletter": false,
+    "roomType": "BUSINESS",
+    "roomDescription": "Team building event, need team activities coordination and group dining arrangements."
   }
 ]
