@@ -43,4 +43,10 @@ public interface Configuration extends Config {
 
     @Key("environment")
     String environment();
+
+    @Key("guru99.username")
+    String guru99Username();
+
+    @Key("guru99.password")
+    String guru99Password();
 }
