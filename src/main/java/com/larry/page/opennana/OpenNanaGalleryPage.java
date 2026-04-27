@@ -24,7 +24,7 @@ public class OpenNanaGalleryPage extends AbstractPageObject {
     public void navigateToGallery() {
         System.out.println("[OpenNanaGalleryPage] Navigating to: " + GALLERY_URL);
         DriverManager.getDriver().get(GALLERY_URL);
-        Waits.waitForPageToLoad();
+        Waits.sleep(2000);
         System.out.println("[OpenNanaGalleryPage] Page loaded");
     }
 
@@ -32,7 +32,7 @@ public class OpenNanaGalleryPage extends AbstractPageObject {
     public void navigateToUrl(String url) {
         System.out.println("[OpenNanaGalleryPage] Navigating to: " + url);
         DriverManager.getDriver().get(url);
-        Waits.waitForPageToLoad();
+        Waits.sleep(2000);
         System.out.println("[OpenNanaGalleryPage] Page loaded");
     }
 
@@ -97,7 +97,7 @@ public class OpenNanaGalleryPage extends AbstractPageObject {
         System.out.println("[OpenNanaGalleryPage] Clicking on card...");
         try {
             Waits.waitForClickability(card).click();
-            Waits.waitForPageToLoad();
+            Waits.sleep(2000);
             System.out.println("[OpenNanaGalleryPage] Card clicked, detail page should be open");
         } catch (Exception e) {
             System.out.println("[OpenNanaGalleryPage] Error clicking card: " + e.getMessage());
