@@ -8,7 +8,6 @@ import com.larry.page.opennana.OpenNanaDetailPage;
 import com.larry.page.opennana.OpenNanaGalleryPage;
 import com.larry.wait.Waits;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -18,14 +17,16 @@ import java.util.List;
 
 public class OpenNanaScraperTest {
 
-    private static final int TARGET_CARD_COUNT = 5;
+    private static final int TARGET_CARD_COUNT = 10;
     private static final String OUTPUT_DIRECTORY = "output";
 
     @BeforeMethod
     public void setup() {
+        System.out.println("Setting up WebDriver...");
         WebDriver driver = new TargetFactory().createInstance("chrome");
         DriverManager.setDriver(driver);
-        driver.manage().window().maximize();
+        System.out.println("WebDriver created successfully");
+        Waits.sleep(1000);
     }
 
     @AfterMethod
@@ -33,7 +34,7 @@ public class OpenNanaScraperTest {
         DriverManager.quit();
     }
 
-    @Test(description = "Extract prompt data from OpenNana gallery")
+    @Test(description = "Extract prompt data from OpenNana gallery (Improved Strategy)")
     public void extractPromptData() {
         DataSaver.ensureDirectoryExists(OUTPUT_DIRECTORY);
         
@@ -41,47 +42,58 @@ public class OpenNanaScraperTest {
         OpenNanaDetailPage detailPage = new OpenNanaDetailPage();
         List<PromptData> extractedData = new ArrayList<>();
 
+        System.out.println("\n" + "=".repeat(70));
+        System.out.println("Step 1: Preloading card information (title, image URL, detail URL)");
+        System.out.println("=".repeat(70) + "\n");
+
         galleryPage.navigateToGallery();
         Waits.sleep(3000);
 
-        galleryPage.scrollToLoadCards(TARGET_CARD_COUNT);
+        List<OpenNanaGalleryPage.CardInfo> allCards = galleryPage.scrollToLoadCards(TARGET_CARD_COUNT);
         
-        List<WebElement> cards = galleryPage.getImageCards();
-        int cardsToProcess = Math.min(cards.size(), TARGET_CARD_COUNT);
+        int cardsToProcess = Math.min(allCards.size(), TARGET_CARD_COUNT);
         
-        System.out.println("\n" + "=".repeat(60));
-        System.out.println("Starting data extraction for " + cardsToProcess + " cards...");
-        System.out.println("=".repeat(60) + "\n");
+        System.out.println("\n" + "=".repeat(70));
+        System.out.println("Preloaded " + cardsToProcess + " cards!");
+        System.out.println("=".repeat(70));
+        
+        for (int i = 0; i < cardsToProcess; i++) {
+            OpenNanaGalleryPage.CardInfo card = allCards.get(i);
+            System.out.println("  " + (i + 1) + ". " + card.getTitle());
+            System.out.println("     URL: " + card.getDetailUrl());
+        }
+
+        System.out.println("\n" + "=".repeat(70));
+        System.out.println("Step 2: Extracting data from each detail page");
+        System.out.println("=".repeat(70) + "\n");
 
         for (int i = 0; i < cardsToProcess; i++) {
-            System.out.println("\n--- Processing card " + (i + 1) + " of " + cardsToProcess + " ---");
+            OpenNanaGalleryPage.CardInfo cardInfo = allCards.get(i);
             
+            System.out.println("\n" + "-".repeat(70));
+            System.out.println("Processing card " + (i + 1) + " of " + cardsToProcess);
+            System.out.println("Title: " + cardInfo.getTitle());
+            System.out.println("Detail URL: " + cardInfo.getDetailUrl());
+            System.out.println("-".repeat(70) + "\n");
+
             try {
-                cards = galleryPage.getImageCards();
-                if (i >= cards.size()) {
-                    System.out.println("Warning: Card index " + i + " is out of bounds, skipping...");
+                if (cardInfo.getDetailUrl() == null || cardInfo.getDetailUrl().isEmpty()) {
+                    System.out.println("⚠️ Warning: Detail URL is empty, skipping this card");
                     continue;
                 }
-                
-                WebElement card = cards.get(i);
-                
-                String cardTitle = galleryPage.getTitleFromCard(card);
-                String imageUrl = galleryPage.getImageUrlFromCard(card);
-                
-                System.out.println("Card Title: " + cardTitle);
-                System.out.println("Image URL: " + imageUrl);
 
-                galleryPage.clickCard(card);
-                Waits.sleep(3000);
+                System.out.println("Navigating directly to detail page...");
+                galleryPage.navigateToDetailPage(cardInfo.getDetailUrl());
+                Waits.sleep(2000);
 
                 String currentUrl = detailPage.getCurrentUrl();
-                System.out.println("Detail Page URL: " + currentUrl);
+                System.out.println("Current URL: " + currentUrl);
 
                 String pageTitle = detailPage.getPageTitle();
                 System.out.println("Page Title: " + pageTitle);
 
                 String sampleImageUrl = detailPage.getFirstSampleImageUrl();
-                System.out.println("Sample Image URL: " + sampleImageUrl);
+                System.out.println("Sample Image URL: " + (sampleImageUrl != null ? sampleImageUrl : "null"));
 
                 System.out.println("\nExtracting prompts...");
                 List<String> allPrompts = detailPage.extractPrompts();
@@ -121,12 +133,14 @@ public class OpenNanaScraperTest {
                 }
 
                 System.out.println("\n--- Final Selection ---");
-                System.out.println("English Prompt: " + (promptEn != null ? promptEn.substring(0, Math.min(100, promptEn.length())) + "..." : "null"));
-                System.out.println("Chinese Prompt: " + (promptCh != null ? promptCh.substring(0, Math.min(100, promptCh.length())) + "..." : "null"));
+                System.out.println("English Prompt: " + (promptEn != null ? 
+                    promptEn.substring(0, Math.min(100, promptEn.length())) + "..." : "null"));
+                System.out.println("Chinese Prompt: " + (promptCh != null ? 
+                    promptCh.substring(0, Math.min(100, promptCh.length())) + "..." : "null"));
 
                 PromptData data = new PromptData();
-                data.setTitle(pageTitle != null ? pageTitle : cardTitle);
-                data.setImageUrl(sampleImageUrl != null ? sampleImageUrl : imageUrl);
+                data.setTitle(pageTitle != null ? pageTitle : cardInfo.getTitle());
+                data.setImageUrl(sampleImageUrl != null ? sampleImageUrl : cardInfo.getImageUrl());
                 data.setPromptEn(promptEn);
                 data.setPromptCh(promptCh);
                 data.setSourceUrl(currentUrl);
@@ -134,29 +148,15 @@ public class OpenNanaScraperTest {
                 extractedData.add(data);
                 System.out.println("\n✅ Successfully extracted: " + data.getTitle());
 
-                detailPage.goBack();
-                Waits.sleep(2000);
-
             } catch (Exception e) {
                 System.out.println("❌ Error processing card " + (i + 1) + ": " + e.getMessage());
                 e.printStackTrace();
-                
-                try {
-                    String currentUrl = DriverManager.getDriver().getCurrentUrl();
-                    if (!currentUrl.contains("awesome-prompt-gallery?media_type=image")) {
-                        System.out.println("Returning to gallery page...");
-                        galleryPage.navigateToGallery();
-                        Waits.sleep(2000);
-                    }
-                } catch (Exception ex) {
-                    System.out.println("Error during recovery: " + ex.getMessage());
-                }
             }
         }
 
-        System.out.println("\n" + "=".repeat(60));
+        System.out.println("\n" + "=".repeat(70));
         System.out.println("Data Extraction Complete!");
-        System.out.println("=".repeat(60));
+        System.out.println("=".repeat(70));
         
         DataSaver.printSummary(extractedData);
 
@@ -171,67 +171,28 @@ public class OpenNanaScraperTest {
         System.out.println("   CSV: " + csvFilePath);
     }
 
-    @Test(description = "Test single card extraction for debugging")
-    public void testSingleCardExtraction() {
-        DataSaver.ensureDirectoryExists(OUTPUT_DIRECTORY);
-        
+    @Test(description = "Test scroll and card loading")
+    public void testScrollLoading() {
         OpenNanaGalleryPage galleryPage = new OpenNanaGalleryPage();
-        OpenNanaDetailPage detailPage = new OpenNanaDetailPage();
 
+        System.out.println("\n=== Testing Scroll Loading ===");
+        
         galleryPage.navigateToGallery();
         Waits.sleep(3000);
 
-        List<WebElement> cards = galleryPage.getImageCards();
-        if (cards.isEmpty()) {
-            System.out.println("No cards found!");
-            return;
+        List<OpenNanaGalleryPage.CardInfo> cards = galleryPage.scrollToLoadCards(15);
+        
+        System.out.println("\n=== Results ===");
+        System.out.println("Total cards loaded: " + cards.size());
+        
+        for (int i = 0; i < cards.size(); i++) {
+            OpenNanaGalleryPage.CardInfo card = cards.get(i);
+            System.out.println("\n" + (i + 1) + ". " + card.getTitle());
+            System.out.println("   Image URL: " + (card.getImageUrl() != null ? card.getImageUrl().substring(0, 50) + "..." : "null"));
+            System.out.println("   Detail URL: " + card.getDetailUrl());
         }
-
-        System.out.println("\n=== Testing Single Card Extraction ===");
-        System.out.println("Found " + cards.size() + " cards\n");
-
-        try {
-            WebElement firstCard = cards.get(0);
-            
-            String cardTitle = galleryPage.getTitleFromCard(firstCard);
-            String imageUrl = galleryPage.getImageUrlFromCard(firstCard);
-            
-            System.out.println("Card Title: " + cardTitle);
-            System.out.println("Card Image URL: " + imageUrl);
-
-            galleryPage.clickCard(firstCard);
-            Waits.sleep(3000);
-
-            String currentUrl = detailPage.getCurrentUrl();
-            System.out.println("\nDetail Page URL: " + currentUrl);
-
-            String pageTitle = detailPage.getPageTitle();
-            System.out.println("Page Title: " + pageTitle);
-
-            String sampleImageUrl = detailPage.getFirstSampleImageUrl();
-            System.out.println("Sample Image URL: " + sampleImageUrl);
-
-            System.out.println("\n--- Extracting all possible prompts ---");
-            List<String> allPrompts = detailPage.extractPrompts();
-            System.out.println("\nTotal prompts found: " + allPrompts.size());
-            
-            for (int i = 0; i < allPrompts.size(); i++) {
-                String p = allPrompts.get(i);
-                System.out.println("\n=== Prompt " + (i + 1) + " (length: " + p.length() + ") ===");
-                System.out.println(p);
-                System.out.println("\nContains Chinese: " + containsChinese(p));
-            }
-
-            System.out.println("\n=== Trying copy buttons approach ===");
-            // This is now integrated into extractPrompts() method
-            System.out.println("Copy button extraction is now integrated into main extraction logic");
-
-            System.out.println("\n=== Test Complete ===");
-
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-            e.printStackTrace();
-        }
+        
+        System.out.println("\n=== Test Complete ===");
     }
 
     private boolean containsChinese(String text) {
