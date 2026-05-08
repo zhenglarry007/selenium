@@ -18,14 +18,26 @@ public class DriverManager {
     }
 
     public static void quit() {
-        DriverManager.driver.get().quit();
+        WebDriver webDriver = DriverManager.driver.get();
+        if (webDriver != null) {
+            webDriver.quit();
+        }
         driver.remove();
     }
 
     public static String getInfo() {
-        var cap = ((RemoteWebDriver) DriverManager.getDriver()).getCapabilities();
+        WebDriver webDriver = DriverManager.getDriver();
+        if (webDriver == null) {
+            return "browser: unknown v: unknown platform: unknown";
+        }
+
+        if (!(webDriver instanceof RemoteWebDriver remoteWebDriver)) {
+            return String.format("browser: %s v: unknown platform: unknown", webDriver.getClass().getSimpleName());
+        }
+
+        var cap = remoteWebDriver.getCapabilities();
         String browserName = cap.getBrowserName();
-        String platform = cap.getPlatformName().toString();
+        String platform = String.valueOf(cap.getPlatformName());
         String version = cap.getBrowserVersion();
 
         return String.format("browser: %s v: %s platform: %s", browserName, version, platform);

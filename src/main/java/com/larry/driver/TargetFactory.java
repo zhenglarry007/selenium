@@ -37,7 +37,7 @@ public class TargetFactory {
         try {
             String gridURL = format("http://%s:%s", configuration().gridUrl(), configuration().gridPort());
 
-            remoteWebDriver = new RemoteWebDriver(URI.create(gridURL).toURL(), capability);
+            remoteWebDriver = new RemoteWebDriver(URI. create(gridURL).toURL(), capability);
         } catch (java.net.MalformedURLException e) {
             logger.error("Grid URL is invalid or Grid is not available");
             logger.error("Browser: {}", capability.getBrowserName(), e);

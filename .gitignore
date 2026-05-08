@@ -1,5 +1,9 @@
 .settings/
 grid/assets
+.DS_Store
+
+# Docker
+docker/
 
 # Intellij
 .idea/
