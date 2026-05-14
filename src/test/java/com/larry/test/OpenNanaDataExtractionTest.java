@@ -4,12 +4,16 @@ import com.larry.BaseWeb;
 import com.larry.data.model.PromptData;
 import com.larry.data.util.DataSaver;
 import com.larry.driver.DriverManager;
+import com.larry.driver.TargetFactory;
 import com.larry.page.opennana.OpenNanaDetailPage;
 import com.larry.page.opennana.OpenNanaGalleryPage;
 import com.larry.wait.Waits;
 import io.qameta.allure.Description;
 import io.qameta.allure.Step;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -20,6 +24,14 @@ public class OpenNanaDataExtractionTest extends BaseWeb {
     private static final int TARGET_CARD_COUNT = 10;
     private static final String OUTPUT_DIRECTORY = "output";
     private static final String OUTPUT_FILE_NAME = "opennana_prompts";
+
+    @BeforeMethod(alwaysRun = true)
+    @Override
+    public void preCondition(@Optional("chrome") String browser) {
+        WebDriver driver = new TargetFactory().createInstance(browser);
+        DriverManager.setDriver(driver);
+        // Do not navigate to default url for extraction tests
+    }
 
     @Test(description = "Extract prompt data from OpenNana gallery")
     @Description("Navigate to OpenNana gallery, scroll to load cards, click each card, extract prompt data, and save to JSON")
@@ -60,7 +72,7 @@ public class OpenNanaDataExtractionTest extends BaseWeb {
                 System.out.println("Card Title: " + cardTitle);
                 System.out.println("Image URL: " + imageUrl);
 
-                galleryPage.clickCard(card);
+                galleryPage.clickCardByIndex(i);
                 Waits.sleep(2000);
 
                 String currentUrl = detailPage.getCurrentUrl();
@@ -71,6 +83,12 @@ public class OpenNanaDataExtractionTest extends BaseWeb {
 
                 String sampleImageUrl = detailPage.getFirstSampleImageUrl();
                 System.out.println("Sample Image URL: " + sampleImageUrl);
+
+                String resource = detailPage.getResource();
+                System.out.println("Resource: " + resource);
+
+                String model = detailPage.getModel();
+                System.out.println("Model: " + model);
 
                 System.out.println("\nExtracting prompts...");
                 List<String> allPrompts = detailPage.extractPrompts();
@@ -119,6 +137,8 @@ public class OpenNanaDataExtractionTest extends BaseWeb {
                 data.setPromptEn(promptEn);
                 data.setPromptCh(promptCh);
                 data.setSourceUrl(currentUrl);
+                data.setResource(resource);
+                data.setModel(model);
 
                 extractedData.add(data);
                 System.out.println("\n✅ Successfully extracted: " + data.getTitle());
@@ -199,7 +219,7 @@ public class OpenNanaDataExtractionTest extends BaseWeb {
             System.out.println("Card Title: " + cardTitle);
             System.out.println("Card Image URL: " + imageUrl);
 
-            galleryPage.clickCard(firstCard);
+            galleryPage.clickCardByIndex(0);
             Waits.sleep(2000);
 
             String currentUrl = detailPage.getCurrentUrl();
@@ -223,7 +243,7 @@ public class OpenNanaDataExtractionTest extends BaseWeb {
             }
 
             System.out.println("\n--- Trying copy buttons approach ---");
-            List<String> copyPrompts = detailPage.getPromptsFromCopyButtons();
+            List<String> copyPrompts = detailPage.extractPromptsFromCopyButtons();
             System.out.println("Copy button prompts found: " + copyPrompts.size());
 
             System.out.println("\n=== Test Complete ===");

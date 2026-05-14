@@ -1,0 +1,23 @@
+{
+  "name": "selenium",
+  "version": "1.0.0",
+  "description": "一个基于 `Selenium + TestNG + Maven + Allure` 的轻量级 Web UI 自动化测试框架，内置页面对象模型（POM）、多执行目标（本地 / Selenium Grid / Testcontainers）以及操作过程截图记录。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhenglarry007/selenium.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhenglarry007/selenium/issues"
+  },
+  "homepage": "https://github.com/zhenglarry007/selenium#readme",
+  "dependencies": {
+    "playwright": "^1.59.1"
+  }
+}

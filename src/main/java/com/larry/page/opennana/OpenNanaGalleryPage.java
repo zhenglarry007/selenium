@@ -22,6 +22,7 @@ public class OpenNanaGalleryPage extends AbstractPageObject {
     private final By cardLink = By.cssSelector("a");
 
     private static final String GALLERY_URL = "https://opennana.com/awesome-prompt-gallery?media_type=image&model=ChatGPT";
+    // private static final String GALLERY_URL = "https://opennana.com/awesome-prompt-gallery?media_type=image&model=Nano%20Banana%20Pro";
 
     @Step("Navigate to OpenNana gallery page")
     public void navigateToGallery() {

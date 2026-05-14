@@ -24,8 +24,10 @@ public class OpenNanaScraperTest {
 
     private static final int TARGET_CARD_COUNT = 10;
     private static final String OUTPUT_DIRECTORY = "output";
+    // private static final String DEFAULT_MODEL = "Nano Banana Pro";
     private static final String DEFAULT_MODEL = "ChatGPT";
-    
+
+        
     private static final long DETAIL_PAGE_DELAY_MS = 1500;
     private static final boolean ENABLE_VERBOSE_LOGGING = false;
 
@@ -64,7 +66,7 @@ public class OpenNanaScraperTest {
         System.out.println("📥 Step 1: Fetching card list from OpenNana API");
         System.out.println("=".repeat(70));
 
-        List<OpenNanaApiResponse.Item> items = apiClient.fetchAllPrompts();
+        List<OpenNanaApiResponse.Item> items = apiClient.fetchAllPrompts(DEFAULT_MODEL, OpenNanaApiClient.allItems());
         
         if (items == null || items.isEmpty()) {
             System.out.println("❌ No items fetched from API!");
@@ -156,6 +158,8 @@ public class OpenNanaScraperTest {
                 String currentUrl = detailPage.getCurrentUrl();
                 String pageTitle = detailPage.getPageTitle();
                 String sampleImageUrl = detailPage.getFirstSampleImageUrl();
+                String resource = detailPage.getResource();
+                String model = detailPage.getModel();
 
                 List<String> allPrompts = detailPage.extractPrompts();
 
@@ -189,6 +193,8 @@ public class OpenNanaScraperTest {
                 data.setPromptEn(promptEn);
                 data.setPromptCh(promptCh);
                 data.setSourceUrl(currentUrl);
+                data.setResource(resource);
+                data.setModel(model);
                 data.setCreatedAt(LocalDateTime.now());
 
                 extractedData.add(data);
@@ -267,7 +273,7 @@ public class OpenNanaScraperTest {
 
         System.out.println("\n📥 Fetching latest data from API...");
 
-        List<OpenNanaApiResponse.Item> items = apiClient.fetchAllPrompts();
+        List<OpenNanaApiResponse.Item> items = apiClient.fetchAllPrompts(DEFAULT_MODEL, OpenNanaApiClient.allItems());
         
         if (items == null || items.isEmpty()) {
             System.out.println("❌ No items fetched from API!");
@@ -377,6 +383,10 @@ public class OpenNanaScraperTest {
         System.out.println("   Delay between pages: " + (DETAIL_PAGE_DELAY_MS / 1000.0) + "s");
         System.out.println("=".repeat(70));
 
+        String baseFileName = "opennana_prompts_" + timestamp;
+        String jsonFilePath = OUTPUT_DIRECTORY + "/" + baseFileName + ".json";
+        String csvFilePath = OUTPUT_DIRECTORY + "/" + baseFileName + ".csv";
+
         int successCount = 0;
         int errorCount = 0;
         int skipCount = 0;
@@ -431,6 +441,8 @@ public class OpenNanaScraperTest {
                 String currentUrl = detailPage.getCurrentUrl();
                 String pageTitle = detailPage.getPageTitle();
                 String sampleImageUrl = detailPage.getFirstSampleImageUrl();
+                String resource = detailPage.getResource();
+                String model = detailPage.getModel();
 
                 if (ENABLE_VERBOSE_LOGGING) {
                     System.out.println("📍 Current URL: " + currentUrl);
@@ -492,6 +504,8 @@ public class OpenNanaScraperTest {
                 data.setPromptEn(promptEn);
                 data.setPromptCh(promptCh);
                 data.setSourceUrl(currentUrl);
+                data.setResource(resource);
+                data.setModel(model);
                 data.setCreatedAt(LocalDateTime.now());
 
                 extractedData.add(data);
@@ -505,6 +519,13 @@ public class OpenNanaScraperTest {
                 System.out.println("\n✅ Successfully extracted!");
                 System.out.println("   English: " + (promptEn != null ? "✓" : "✗"));
                 System.out.println("   Chinese: " + (promptCh != null ? "✓" : "✗"));
+                
+                // 每 10 条数据落盘一次，防止数据丢失
+                if (extractedData.size() > 0 && extractedData.size() % 10 == 0) {
+                    System.out.println("\n💾 Auto-saving batch of " + extractedData.size() + " items...");
+                    DataSaver.saveToJson(extractedData, jsonFilePath);
+                    DataSaver.saveToCsv(extractedData, csvFilePath);
+                }
 
             } catch (Exception e) {
                 errorCount++;
@@ -540,10 +561,6 @@ public class OpenNanaScraperTest {
             String.format("%.1fs", (double) totalTime / successCount) : "N/A"));
         
         DataSaver.printSummary(extractedData);
-
-        String baseFileName = "opennana_prompts_" + timestamp;
-        String jsonFilePath = OUTPUT_DIRECTORY + "/" + baseFileName + ".json";
-        String csvFilePath = OUTPUT_DIRECTORY + "/" + baseFileName + ".csv";
         
         DataSaver.saveToJson(extractedData, jsonFilePath);
         DataSaver.saveToCsv(extractedData, csvFilePath);
@@ -587,7 +604,7 @@ public class OpenNanaScraperTest {
         System.out.println("📥 Testing API Fetch ALL");
         System.out.println("=".repeat(70));
         
-        List<OpenNanaApiResponse.Item> items = apiClient.fetchAllPrompts();
+        List<OpenNanaApiResponse.Item> items = apiClient.fetchAllPrompts(DEFAULT_MODEL, OpenNanaApiClient.allItems());
         
         System.out.println("\n=== Results ===");
         System.out.println("Total items fetched: " + (items != null ? items.size() : 0));

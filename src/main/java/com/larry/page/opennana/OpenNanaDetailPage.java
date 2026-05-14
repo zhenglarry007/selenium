@@ -18,6 +18,41 @@ public class OpenNanaDetailPage extends AbstractPageObject {
     private final By sampleImages = By.cssSelector("img[alt^='示例']");
     private final By sections = By.tagName("section");
     private final By allDivs = By.tagName("div");
+    private final By sourceLink = By.xpath("//span[contains(., '来源:')]//a");
+    private final By modelSpan = By.xpath("//span[contains(., '模型:')]");
+
+    @Step("Get resource URL")
+    public String getResource() {
+        try {
+            List<WebElement> elements = DriverManager.getDriver().findElements(sourceLink);
+            if (!elements.isEmpty()) {
+                String href = elements.get(0).getAttribute("href");
+                System.out.println("[OpenNanaDetailPage] Found resource URL: " + href);
+                return href;
+            }
+        } catch (Exception e) {
+            System.out.println("[OpenNanaDetailPage] Error getting resource: " + e.getMessage());
+        }
+        return null;
+    }
+
+    @Step("Get model name")
+    public String getModel() {
+        try {
+            List<WebElement> elements = DriverManager.getDriver().findElements(modelSpan);
+            if (!elements.isEmpty()) {
+                String text = elements.get(0).getText();
+                System.out.println("[OpenNanaDetailPage] Found model raw text: " + text);
+                if (text.contains("模型:")) {
+                    return text.replace("模型:", "").trim();
+                }
+                return text;
+            }
+        } catch (Exception e) {
+            System.out.println("[OpenNanaDetailPage] Error getting model: " + e.getMessage());
+        }
+        return null;
+    }
 
     @Step("Get page title")
     public String getPageTitle() {

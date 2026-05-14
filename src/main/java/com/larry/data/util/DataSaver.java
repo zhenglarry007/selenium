@@ -55,7 +55,7 @@ public class DataSaver {
 
     public static void saveToCsv(List<PromptData> dataList, String filePath) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
-            writer.println("title,imageUrl,promptEn,promptCh,sourceUrl");
+            writer.println("title,imageUrl,promptEn,promptCh,sourceUrl,resource,model");
             
             for (PromptData data : dataList) {
                 String line = String.join(",",
@@ -63,7 +63,9 @@ public class DataSaver {
                         escapeCsv(data.getImageUrl()),
                         escapeCsv(data.getPromptEn()),
                         escapeCsv(data.getPromptCh()),
-                        escapeCsv(data.getSourceUrl())
+                        escapeCsv(data.getSourceUrl()),
+                        escapeCsv(data.getResource()),
+                        escapeCsv(data.getModel())
                 );
                 writer.println(line);
             }
@@ -97,6 +99,8 @@ public class DataSaver {
             System.out.println("    Image URL: " + (data.getImageUrl() != null ? "✓" : "✗"));
             System.out.println("    English Prompt: " + (data.getPromptEn() != null ? "✓" : "✗"));
             System.out.println("    Chinese Prompt: " + (data.getPromptCh() != null ? "✓" : "✗"));
+            System.out.println("    Resource: " + (data.getResource() != null ? "✓" : "✗"));
+            System.out.println("    Model: " + (data.getModel() != null ? "✓" : "✗"));
         }
         
         System.out.println("\n" + "=".repeat(60) + "\n");

@@ -16,6 +16,8 @@ public class PromptData {
     private String promptEn;
     private String promptCh;
     private String sourceUrl;
+    private String resource;
+    private String model;
     
     private String createdAt;
     private String updatedAt;
@@ -68,6 +70,22 @@ public class PromptData {
 
     public void setSourceUrl(String sourceUrl) {
         this.sourceUrl = sourceUrl;
+    }
+
+    public String getResource() {
+        return resource;
+    }
+
+    public void setResource(String resource) {
+        this.resource = resource;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
     }
 
     public String getCreatedAt() {

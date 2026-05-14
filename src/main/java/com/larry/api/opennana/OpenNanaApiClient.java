@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -199,7 +201,8 @@ public class OpenNanaApiClient {
     }
 
     private String buildApiUrl(String model, int page, int limit) {
-        return String.format("%s?page=%d&limit=%d&sort=%s&order=%s&model=%s",
-                BASE_API_URL, page, limit, DEFAULT_SORT, DEFAULT_ORDER, model);
+        String encodedModel = URLEncoder.encode(model, StandardCharsets.UTF_8).replace("+", "%20");
+        return String.format("%s?page=%d&limit=%d&sort=%s&order=%s&model=%s&media_type=image",
+                BASE_API_URL, page, limit, DEFAULT_SORT, DEFAULT_ORDER, encodedModel);
     }
 }
