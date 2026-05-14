@@ -6,7 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.larry.data.dynamic.BookingDataFactory;
 import com.larry.model.Booking;
+import com.larry.model.DashboardConfig;
+import com.larry.model.DashboardTestData;
+import com.larry.model.LoginTestData;
 import org.testng.annotations.DataProvider;
 
 import java.io.IOException;
@@ -15,12 +19,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestDataProvider {
+    
+    private static final int DYNAMIC_DATA_COUNT = 5;
 
     private static final ObjectMapper jsonMapper = new ObjectMapper();
     private static final ObjectMapper yamlMapper = new ObjectMapper(new YAMLFactory());
     private static final CsvMapper csvMapper = new CsvMapper();
+    
+    private static DashboardConfig dashboardConfig;
 
     private TestDataProvider() {
+    }
+
+    @DataProvider(name = "loginTestData")
+    public static Object[][] loginTestData() {
+        return loadJsonData("/testdata/login_test_data.json", new TypeReference<List<LoginTestData>>() {});
     }
 
     @DataProvider(name = "bookingDataJson")
@@ -28,14 +41,26 @@ public class TestDataProvider {
         return loadJsonData("/testdata/booking.json", new TypeReference<List<Booking>>() {});
     }
 
-    @DataProvider(name = "bookingDataYaml")
-    public static Object[][] bookingDataYaml() {
-        return loadYamlData("/testdata/booking.yaml", new TypeReference<List<Booking>>() {});
+    @DataProvider(name = "bookingDataDynamic")
+    public static Object[][] bookingDataDynamic() {
+        List<Booking> bookingList = new ArrayList<>();
+        for (int i = 0; i < DYNAMIC_DATA_COUNT; i++) {
+            Booking booking = BookingDataFactory.createBookingData();
+            bookingList.add(booking);
+        }
+        return toObjectArray(bookingList);
     }
 
-    @DataProvider(name = "bookingDataCsv")
-    public static Object[][] bookingDataCsv() {
-        return loadCsvData("/testdata/booking.csv", Booking.class);
+    @DataProvider(name = "dashboardTestData")
+    public static Object[][] dashboardTestData() {
+        return loadJsonData("/testdata/dashboard_test_data.json", new TypeReference<List<DashboardTestData>>() {});
+    }
+    
+    public static DashboardConfig getDashboardConfig() {
+        if (dashboardConfig == null) {
+            dashboardConfig = loadJsonObject("/testdata/dashboard_test_data.json", DashboardConfig.class);
+        }
+        return dashboardConfig;
     }
 
     private static <T> Object[][] loadJsonData(String resourcePath, TypeReference<List<T>> typeReference) {
@@ -80,6 +105,17 @@ public class TestDataProvider {
             return toObjectArray(dataList);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load CSV data from " + resourcePath, e);
+        }
+    }
+    
+    private static <T> T loadJsonObject(String resourcePath, Class<T> clazz) {
+        try (InputStream inputStream = TestDataProvider.class.getResourceAsStream(resourcePath)) {
+            if (inputStream == null) {
+                throw new IllegalArgumentException("Resource not found: " + resourcePath);
+            }
+            return jsonMapper.readValue(inputStream, clazz);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load JSON object from " + resourcePath, e);
         }
     }
 

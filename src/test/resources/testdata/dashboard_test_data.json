@@ -1,0 +1,6 @@
+{
+  "expectedMinimumTotalBookings": 13,
+  "expectedMinimumPendingBookings": 13,
+  "expectedMinimumRoomTypes": 3,
+  "expectedMinimumRecords": 10
+}

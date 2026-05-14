@@ -7,7 +7,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class NavigationPage extends AbstractPageObject {
 
-    @FindBy(xpath = "//button[normalize-space()='Next Step']")
+    @FindBy(css = "[data-testid='next-button']")
     private WebElement next;
 
     @FindBy(xpath = "//button[normalize-space()='Previous']")

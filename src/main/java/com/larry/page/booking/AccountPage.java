@@ -1,6 +1,5 @@
 package com.larry.page.booking;
 
-import com.larry.driver.DriverManager;
 import com.larry.page.booking.common.NavigationPage;
 import com.larry.wait.Waits;
 import io.qameta.allure.Step;
@@ -10,10 +9,10 @@ import org.openqa.selenium.support.FindBy;
 
 public class AccountPage extends NavigationPage {
 
-    @FindBy(css = "input[placeholder='email@example.com']")
+    @FindBy(css = "[data-testid='email-input']")
     private WebElement email;
 
-    @FindBy(css = "input[placeholder='Enter your password']")
+    @FindBy(css = "[data-testid='password-input']")
     private WebElement password;
 
     @Step

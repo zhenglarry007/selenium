@@ -1,0 +1,14 @@
+{
+  "totalExtracted" : 447,
+  "lastExtractedAt" : "2026-05-09 15:23:55",
+  "firstExtractedAt" : "2026-04-28 00:08:25",
+  "sessions" : [ {
+    "sessionId" : "incremental_20260509_152307",
+    "startedAt" : "2026-05-09 15:23:07",
+    "completedAt" : "2026-05-09 15:29:22",
+    "itemsProcessed" : 223,
+    "itemsAdded" : 9,
+    "itemsFailed" : 214,
+    "durationSeconds" : 375
+  } ]
+}
